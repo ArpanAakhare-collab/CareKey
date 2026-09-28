@@ -116,12 +116,14 @@ export function AuthProvider({ children }) {
     let demoUser;
     if (upperRole === 'DOCTOR') {
       demoUser = {
-        uid: 'demo-doc-01',
-        doctorId: 'DOC-DEMO-01',
-        email: 'doctor@carekey.health',
-        displayName: 'Dr. Sarah Mitchell, MD',
-        specialization: 'Cardiology',
-        hospital: 'Metro Health Hospital',
+        uid: 'doc-arpan-01',
+        doctorId: 'DOC-8821',
+        email: 'dr.arpan@carekey.health',
+        displayName: 'Dr. Arpan',
+        name: 'Dr. Arpan',
+        specialization: 'General Medicine & Cardiology',
+        medicalRegistrationNumber: 'MH-MED-2024-88912',
+        hospital: 'ABC Hospital',
         city: 'Pune',
         role: 'DOCTOR',
         phone: '+91 98765 43210',
@@ -129,22 +131,27 @@ export function AuthProvider({ children }) {
       };
     } else if (upperRole === 'ADMIN') {
       demoUser = {
-        uid: 'demo-admin-01',
-        email: 'admin@healthgov.in',
-        displayName: 'Dr. Rajesh Patel',
+        uid: 'admin-health-01',
+        email: 'surveillance@healthgov.in',
+        displayName: 'Public Health Surveillance Officer',
+        name: 'Public Health Surveillance Officer',
         role: 'ADMIN',
+        department: 'Directorate of Health Services (Surveillance Unit)',
         isDemo: true
       };
     } else {
       demoUser = {
-        uid: 'demo-pat-01',
-        patientId: 'PAT-DEMO-01',
-        email: 'patient@carekey.health',
-        displayName: 'Rohan Sharma',
-        city: 'Pune',
-        dateOfBirth: '1992-05-14',
+        uid: 'pat-rahul-01',
+        patientId: 'CK-10482',
+        email: 'rahul.sharma@carekey.health',
+        displayName: 'Rahul Sharma',
+        name: 'Rahul Sharma',
+        age: 42,
         gender: 'Male',
-        phone: '+91 91234 56789',
+        bloodGroup: 'B+',
+        city: 'Pune',
+        dateOfBirth: '1984-04-12',
+        phone: '+91 98201 44521',
         role: 'PATIENT',
         isDemo: true
       };

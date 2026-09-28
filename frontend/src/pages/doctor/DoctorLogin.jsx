@@ -174,7 +174,7 @@ export function DoctorLogin({ onNavigate }) {
               className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer hover:border-teal-500/40"
             >
               <KeyRound className="w-3.5 h-3.5 text-teal-400" />
-              <span>One-Click Test Doctor Sign In</span>
+              <span>One-Click Doctor Demo Access (Dr. Arpan &mdash; ABC Hospital)</span>
             </button>
           </div>
 

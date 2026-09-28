@@ -46,6 +46,276 @@ function setLocal(key, value) {
   }
 }
 
+// Seed default clean records for Rahul Sharma (CK-10482) & Dr. Arpan (DOC-8821)
+function seedCleanDataIfEmpty() {
+  // 1. Doctors
+  if (!localStorage.getItem('carekey_registered_doctors_v2')) {
+    const defaultDoctors = [
+      {
+        doctorId: 'DOC-8821',
+        uid: 'doc-arpan-01',
+        name: 'Dr. Arpan',
+        specialization: 'General Medicine & Cardiology',
+        medicalRegistrationNumber: 'MH-MED-2024-88912',
+        hospital: 'ABC Hospital',
+        city: 'Pune',
+        email: 'dr.arpan@carekey.health',
+        phone: '+91 98765 43210',
+        role: 'DOCTOR'
+      },
+      {
+        doctorId: 'DOC-7712',
+        uid: 'doc-priya-01',
+        name: 'Dr. Priya Sharma',
+        specialization: 'Cardiology',
+        medicalRegistrationNumber: 'MH-CARD-2022-77189',
+        hospital: 'Metro Heart Institute',
+        city: 'Pune',
+        email: 'priya.sharma@metroheart.in',
+        phone: '+91 98234 11223',
+        role: 'DOCTOR'
+      },
+      {
+        doctorId: 'DOC-5541',
+        uid: 'doc-mehta-01',
+        name: 'Dr. Rajesh Mehta',
+        specialization: 'Pulmonology & Critical Care',
+        medicalRegistrationNumber: 'MH-PULM-2021-44512',
+        hospital: 'City Care Hospital',
+        city: 'Pune',
+        email: 'rajesh.mehta@citycare.in',
+        phone: '+91 98111 22334',
+        role: 'DOCTOR'
+      },
+      {
+        doctorId: 'DOC-3329',
+        uid: 'doc-rao-01',
+        name: 'Dr. Ananya Rao',
+        specialization: 'Internal Medicine',
+        medicalRegistrationNumber: 'MH-INT-2023-99014',
+        hospital: 'Apex Health Clinic',
+        city: 'Pune',
+        email: 'ananya.rao@apexhealth.in',
+        phone: '+91 98555 66778',
+        role: 'DOCTOR'
+      }
+    ];
+    setLocal('carekey_registered_doctors', defaultDoctors);
+    defaultDoctors.forEach(d => {
+      setLocal(`carekey_doc_${d.doctorId}`, d);
+      setLocal(`carekey_doc_${d.uid}`, d);
+    });
+    localStorage.setItem('carekey_registered_doctors_v2', 'true');
+  }
+
+  // 2. Patient: Rahul Sharma (CK-10482)
+  if (!localStorage.getItem('carekey_patient_rahul_v3')) {
+    const rahul = {
+      patientId: 'CK-10482',
+      id: 'CK-10482',
+      patientReference: 'CK-10482',
+      uid: 'pat-rahul-01',
+      ownerUid: 'pat-rahul-01',
+      name: 'Rahul Sharma',
+      age: 42,
+      gender: 'Male',
+      bloodGroup: 'B+',
+      city: 'Pune',
+      district: 'Pune',
+      state: 'Maharashtra',
+      region: 'Pune',
+      dateOfBirth: '1984-04-12',
+      phone: '+91 98201 44521',
+      email: 'rahul.sharma@carekey.health',
+      address: 'Flat 402, Green Meadows, Senapati Bapat Road',
+      emergencyContactName: 'Anita Sharma (Spouse)',
+      emergencyContactPhone: '+91 98201 99881',
+      emergencyContact: {
+        name: 'Anita Sharma (Spouse)',
+        phone: '+91 98201 99881'
+      },
+      allergies: 'Penicillin (mild rash)',
+      existingConditions: 'Hypertension (Controlled)',
+      currentMedications: 'Amlodipine 5mg OD',
+      profileCompleted: true,
+      role: 'PATIENT',
+      createdAt: '2026-03-01T09:00:00Z',
+      updatedAt: '2026-09-28T18:00:00Z'
+    };
+    setLocal('carekey_pat_CK-10482', rahul);
+    setLocal('carekey_pat_pat-rahul-01', rahul);
+    setLocal('carekey_registered_patients', [rahul]);
+    localStorage.setItem('carekey_patient_rahul_v3', 'true');
+
+    // Default Visits
+    const defaultVisits = [
+      {
+        id: 'visit_1',
+        patientId: 'CK-10482',
+        diagnosis: 'Respiratory Infection',
+        condition: 'Respiratory Infection',
+        doctorName: 'Dr. Mehta',
+        doctorId: 'DOC-5541',
+        facility: 'ABC Hospital',
+        symptoms: 'Cough, fever, sore throat',
+        notes: 'Patient reports symptoms for 4 days. Prescribed 5-day antibiotic therapy.',
+        treatmentPlan: 'Course of Amoxicillin 500mg, steam inhalation, and fluid hydration.',
+        date: '2026-08-12',
+        visitDate: '12 Aug 2026'
+      },
+      {
+        id: 'visit_2',
+        patientId: 'CK-10482',
+        diagnosis: 'Hypertension Follow-up',
+        condition: 'Hypertension Follow-up',
+        doctorName: 'Dr. Rao',
+        doctorId: 'DOC-3329',
+        facility: 'City Health Clinic',
+        symptoms: 'Mild morning headaches, BP 138/88 mmHg',
+        notes: 'Blood pressure reasonably controlled. Continue morning antihypertensive regimen.',
+        treatmentPlan: 'Maintain low-sodium diet, regular 30-min walking, and daily Amlodipine 5mg.',
+        date: '2026-06-21',
+        visitDate: '21 Jun 2026'
+      },
+      {
+        id: 'visit_3',
+        patientId: 'CK-10482',
+        diagnosis: 'Routine Checkup',
+        condition: 'Routine Checkup',
+        doctorName: 'Dr. Singh',
+        doctorId: 'DOC-9910',
+        facility: 'Apex Hospital',
+        symptoms: 'None reported (Annual baseline examination)',
+        notes: 'Cardiovascular, respiratory, and abdominal baseline within normal physiological parameters.',
+        treatmentPlan: 'Annual routine metabolic follow-up in 12 months.',
+        date: '2026-03-10',
+        visitDate: '10 Mar 2026'
+      }
+    ];
+    setLocal('carekey_visits_CK-10482', defaultVisits);
+
+    // Default Prescriptions
+    const defaultPrescriptions = [
+      {
+        id: 'rx_1',
+        patientId: 'CK-10482',
+        medicine: 'Amoxicillin',
+        dosage: '500 mg',
+        frequency: '2 times/day',
+        duration: '5 days',
+        instructions: 'Take with warm water after meals',
+        doctorName: 'Dr. Mehta',
+        prescribingDoctor: 'Dr. Mehta',
+        hospital: 'ABC Hospital',
+        status: 'COMPLETED',
+        issuedDate: '12 Aug 2026'
+      },
+      {
+        id: 'rx_2',
+        patientId: 'CK-10482',
+        medicine: 'Amlodipine',
+        dosage: '5 mg',
+        frequency: 'Once Daily (Morning)',
+        duration: '30 days',
+        instructions: 'Take in the morning before breakfast',
+        doctorName: 'Dr. Rao',
+        prescribingDoctor: 'Dr. Rao',
+        hospital: 'City Health Clinic',
+        status: 'ACTIVE',
+        issuedDate: '21 Jun 2026'
+      }
+    ];
+    setLocal('carekey_rxs_CK-10482', defaultPrescriptions);
+
+    // Default Doctor Connection (Dr. Arpan & Rahul Sharma)
+    setLocal('carekey_dp_connections', [
+      {
+        connectionId: 'CONN-001',
+        doctorId: 'DOC-8821',
+        patientId: 'CK-10482',
+        status: 'ACTIVE',
+        hospital: 'ABC Hospital',
+        accessScope: 'Medical History, Clinical Visits, Prescriptions',
+        expiresAt: '2026-09-30',
+        createdAt: '2026-09-01T08:00:00Z'
+      }
+    ]);
+
+    // Default Audit Logs
+    const defaultAudit = [
+      {
+        id: 'log_01',
+        timestamp: '2026-09-28T18:15:00Z',
+        timeFormatted: '28 Sep 2026 18:15',
+        userName: 'Dr. Arpan',
+        userRole: 'DOCTOR',
+        doctorId: 'DOC-8821',
+        patientId: 'CK-10482',
+        patientName: 'Rahul Sharma',
+        action: 'VIEW_PRESCRIPTIONS',
+        details: 'Viewed active prescription history for Rahul Sharma (CK-10482)',
+        status: 'AUTHORIZED',
+        facility: 'ABC Hospital'
+      },
+      {
+        id: 'log_02',
+        timestamp: '2026-09-28T18:10:00Z',
+        timeFormatted: '28 Sep 2026 18:10',
+        userName: 'Dr. Arpan',
+        userRole: 'DOCTOR',
+        doctorId: 'DOC-8821',
+        patientId: 'CK-10482',
+        patientName: 'Rahul Sharma',
+        action: 'QR_SCAN_AUTHENTICATED',
+        details: 'Scanned cryptographic patient QR token (Result: Authorized)',
+        status: 'AUTHORIZED',
+        facility: 'ABC Hospital'
+      },
+      {
+        id: 'log_03',
+        timestamp: '2026-09-28T17:42:00Z',
+        timeFormatted: '28 Sep 2026 17:42',
+        userName: 'Public Health Surveillance Officer',
+        userRole: 'ADMIN',
+        action: 'PRIVACY_K10_SUPPRESSION',
+        details: 'Analytics query for Solapur (Rural Tier-3) Rare Genetic: Count < 10 (Suppressed under K=10 Rule)',
+        status: 'SUPPRESSED',
+        facility: 'Public Health Department'
+      },
+      {
+        id: 'log_04',
+        timestamp: '2026-09-28T17:40:00Z',
+        timeFormatted: '28 Sep 2026 17:40',
+        userName: 'Public Health Surveillance Officer',
+        userRole: 'ADMIN',
+        action: 'ANALYTICS_QUERY',
+        details: 'Surveillance Query: Region: Pune, Condition: Respiratory (Result: 432 Cases Aggregated)',
+        status: 'SUCCESS',
+        facility: 'Public Health Department'
+      },
+      {
+        id: 'log_05',
+        timestamp: '2026-09-21T11:30:00Z',
+        timeFormatted: '21 Sep 2026 11:30',
+        userName: 'Dr. Mehta',
+        userRole: 'DOCTOR',
+        doctorId: 'DOC-5541',
+        patientId: 'CK-10482',
+        patientName: 'Rahul Sharma',
+        action: 'RECORD_ACCESSED',
+        details: 'Viewed medical history at XYZ Clinic',
+        status: 'AUTHORIZED',
+        facility: 'XYZ Clinic'
+      }
+    ];
+    setLocal('carekey_audit_logs', defaultAudit);
+    localStorage.setItem('carekey_patient_rahul_v2', 'true');
+  }
+}
+
+// Execute seed
+seedCleanDataIfEmpty();
+
 export const firestoreService = {
   // ==========================================
   // 1. DOCTOR REGISTRATION & PROFILE
@@ -123,43 +393,66 @@ export const firestoreService = {
   },
 
   // ==========================================
-  // 2. PATIENT REGISTRATION & PROFILE
+  // 2. PATIENT REGISTRATION, SEARCH & PROFILE
   // ==========================================
   async registerPatient(patientData) {
-    const patientId = 'PAT-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const patientReference = patientData.patientReference || 'CK-' + Math.floor(10000 + Math.random() * 90000);
+    const patientId = patientData.patientId || patientReference;
     const patData = {
       patientId,
-      uid: patientData.uid,
+      patientReference,
+      uid: patientData.uid || ('pat_' + Date.now()),
       name: patientData.name,
-      email: patientData.email,
-      phone: patientData.phone,
-      dateOfBirth: patientData.dateOfBirth,
-      gender: patientData.gender,
-      city: patientData.city,
+      email: patientData.email || '',
+      phone: patientData.phone || '',
+      dateOfBirth: patientData.dateOfBirth || '',
+      gender: patientData.gender || 'Male',
+      bloodGroup: patientData.bloodGroup || 'B+',
+      address: patientData.address || '',
+      city: patientData.city || 'Pune',
+      district: patientData.district || 'Pune',
+      state: patientData.state || 'Maharashtra',
+      emergencyContactName: patientData.emergencyContactName || patientData.emergencyContact?.name || '',
+      emergencyContactPhone: patientData.emergencyContactPhone || patientData.emergencyContact?.phone || '',
+      emergencyContact: patientData.emergencyContact || {
+        name: patientData.emergencyContactName || '',
+        phone: patientData.emergencyContactPhone || ''
+      },
+      allergies: patientData.allergies || '',
+      existingConditions: patientData.existingConditions || '',
+      currentMedications: patientData.currentMedications || '',
+      medicalNotes: patientData.medicalNotes || '',
       role: 'PATIENT',
-      createdAt: new Date().toISOString()
+      profileCompleted: patientData.profileCompleted !== undefined ? patientData.profileCompleted : false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     // Save locally
     const localPatients = getLocal('carekey_registered_patients', []);
-    setLocal('carekey_registered_patients', [patData, ...localPatients]);
+    setLocal('carekey_registered_patients', [patData, ...localPatients.filter(p => p.patientId !== patientId && p.patientReference !== patientReference)]);
     setLocal(`carekey_pat_${patData.uid}`, patData);
     setLocal(`carekey_pat_${patientId}`, patData);
+    setLocal(`carekey_pat_${patientReference}`, patData);
 
     // Save in Firestore `patients/{patientId}` & `users/{uid}`
     try {
       const patRef = doc(db, 'patients', patientId);
       await withTimeout(setDoc(patRef, { ...patData, createdAt: serverTimestamp() }), 3000);
-      const userRef = doc(db, 'users', patientData.uid);
-      await withTimeout(setDoc(userRef, {
-        uid: patientData.uid,
-        name: patientData.name,
-        email: patientData.email,
-        phone: patientData.phone,
-        role: 'PATIENT',
-        patientId,
-        createdAt: serverTimestamp()
-      }, { merge: true }), 3000);
+      if (patientData.uid) {
+        const userRef = doc(db, 'users', patientData.uid);
+        await withTimeout(setDoc(userRef, {
+          uid: patientData.uid,
+          name: patientData.name,
+          email: patientData.email,
+          phone: patientData.phone,
+          role: 'PATIENT',
+          patientId,
+          patientReference,
+          profileCompleted: patData.profileCompleted,
+          createdAt: serverTimestamp()
+        }, { merge: true }), 3000);
+      }
     } catch (err) {
       console.warn('Firestore patient registration notice:', err.message);
     }
@@ -167,8 +460,157 @@ export const firestoreService = {
     return patData;
   },
 
+  async createPatientByDoctor(patientData, doctorId) {
+    const patientReference = 'CK-' + Math.floor(10000 + Math.random() * 90000);
+    const patientId = patientReference;
+    const qrToken = `https://carekey.app/access/${patientReference}-SEC${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const newPatient = {
+      patientId,
+      patientReference,
+      uid: 'pat_onboard_' + Date.now(),
+      name: patientData.name,
+      dateOfBirth: patientData.dateOfBirth || '',
+      gender: patientData.gender || 'Male',
+      bloodGroup: patientData.bloodGroup || 'B+',
+      phone: patientData.phone || '',
+      email: patientData.email || '',
+      address: patientData.address || '',
+      city: patientData.city || 'Pune',
+      district: patientData.district || 'Pune',
+      state: patientData.state || 'Maharashtra',
+      emergencyContactName: patientData.emergencyContactName || '',
+      emergencyContactPhone: patientData.emergencyContactPhone || '',
+      emergencyContact: {
+        name: patientData.emergencyContactName || 'Emergency Contact',
+        phone: patientData.emergencyContactPhone || patientData.phone || ''
+      },
+      allergies: patientData.allergies || 'No known drug allergies',
+      existingConditions: patientData.existingConditions || 'None reported',
+      currentMedications: patientData.currentMedications || 'None',
+      medicalNotes: patientData.medicalNotes || '',
+      role: 'PATIENT',
+      createdByDoctorId: doctorId,
+      profileCompleted: true,
+      qrToken,
+      qrStatus: 'Active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Save in cache
+    const localPatients = getLocal('carekey_registered_patients', []);
+    setLocal('carekey_registered_patients', [newPatient, ...localPatients]);
+    setLocal(`carekey_pat_${patientId}`, newPatient);
+    setLocal(`carekey_pat_${patientReference}`, newPatient);
+    setLocal(`carekey_qr_${qrToken}`, newPatient);
+
+    // Establish active doctor-patient connection
+    const localConns = getLocal('carekey_dp_connections', []);
+    setLocal('carekey_dp_connections', [
+      {
+        connectionId: 'CONN-' + Date.now(),
+        doctorId: doctorId || 'DOC-8821',
+        patientId: patientId,
+        patientReference,
+        status: 'ACTIVE',
+        accessScope: 'Medical History, Clinical Visits, Prescriptions',
+        createdAt: new Date().toISOString()
+      },
+      ...localConns
+    ]);
+
+    // Save to Firestore
+    try {
+      const patRef = doc(db, 'patients', patientId);
+      await withTimeout(setDoc(patRef, { ...newPatient, createdAt: serverTimestamp() }), 3000);
+    } catch (err) {
+      console.warn('Firestore create patient by doctor notice:', err.message);
+    }
+
+    return newPatient;
+  },
+
+  async searchPatients(queryStr) {
+    if (!queryStr || !queryStr.trim()) return [];
+    const term = queryStr.trim().toLowerCase();
+    const local = getLocal('carekey_registered_patients', []);
+    
+    // Always include default Rahul Sharma
+    const rahul = getLocal('carekey_pat_CK-10482', {
+      patientId: 'CK-10482',
+      patientReference: 'CK-10482',
+      name: 'Rahul Sharma',
+      age: 42,
+      gender: 'Male',
+      bloodGroup: 'B+',
+      phone: '+91 98201 44521',
+      email: 'rahul.sharma@carekey.health',
+      city: 'Pune',
+      district: 'Pune',
+      state: 'Maharashtra',
+      emergencyContactName: 'Anita Sharma',
+      emergencyContactPhone: '+91 98201 99882',
+      allergies: 'Penicillin (mild rash)',
+      existingConditions: 'Primary Essential Hypertension',
+      currentMedications: 'Amlodipine (5 mg daily)',
+      profileCompleted: true
+    });
+
+    const all = [rahul, ...local.filter(p => p.patientId !== 'CK-10482')];
+    return all.filter(p => 
+      (p.patientReference && p.patientReference.toLowerCase().includes(term)) ||
+      (p.patientId && p.patientId.toLowerCase().includes(term)) ||
+      (p.name && p.name.toLowerCase().includes(term)) ||
+      (p.phone && p.phone.toLowerCase().includes(term)) ||
+      (p.email && p.email.toLowerCase().includes(term))
+    );
+  },
+
+  async updatePatientProfile(uidOrPatientId, profileData) {
+    if (!uidOrPatientId) return null;
+    const existing = await this.getPatientProfile(uidOrPatientId) || {};
+    
+    // Clean, patient-owned fields only (protect system-controlled patientReference and role)
+    const updated = {
+      ...existing,
+      ...profileData,
+      role: 'PATIENT', // Role is IMMUTABLE by patient
+      patientId: existing.patientId || uidOrPatientId,
+      patientReference: existing.patientReference || existing.patientId || uidOrPatientId,
+      profileCompleted: true,
+      updatedAt: new Date().toISOString()
+    };
+
+    setLocal(`carekey_pat_${uidOrPatientId}`, updated);
+    if (updated.patientId) setLocal(`carekey_pat_${updated.patientId}`, updated);
+    if (updated.patientReference) setLocal(`carekey_pat_${updated.patientReference}`, updated);
+    if (updated.uid) setLocal(`carekey_pat_${updated.uid}`, updated);
+
+    // Save in registered patients list
+    const local = getLocal('carekey_registered_patients', []);
+    setLocal('carekey_registered_patients', [
+      updated,
+      ...local.filter(p => p.patientId !== updated.patientId && p.uid !== updated.uid)
+    ]);
+
+    try {
+      const docRef = doc(db, 'patients', updated.patientId || uidOrPatientId);
+      await withTimeout(setDoc(docRef, { ...updated, updatedAt: serverTimestamp() }, { merge: true }), 2500);
+    } catch (err) {
+      console.warn('Firestore update patient profile notice:', err.message);
+    }
+
+    return updated;
+  },
+
   async getPatientProfile(patientIdOrUid) {
     if (!patientIdOrUid) return null;
+    if (patientIdOrUid === 'CK-10482' || patientIdOrUid === 'pat-rahul-01') {
+      const cached = getLocal('carekey_pat_CK-10482', null);
+      if (cached) return cached;
+    }
+
     const cache = getLocal(`carekey_pat_${patientIdOrUid}`, null);
     try {
       const patRef = doc(db, 'patients', patientIdOrUid);
@@ -190,7 +632,7 @@ export const firestoreService = {
     }
     if (cache) return cache;
     const all = getLocal('carekey_registered_patients', []);
-    return all.find(p => p.patientId === patientIdOrUid || p.uid === patientIdOrUid) || null;
+    return all.find(p => p.patientId === patientIdOrUid || p.patientReference === patientIdOrUid || p.uid === patientIdOrUid) || null;
   },
 
   // ==========================================

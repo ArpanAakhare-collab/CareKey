@@ -29,6 +29,31 @@ public class ClinicianController {
     private final PrescriptionService prescriptionService;
     private final AuditService auditService;
 
+    @PostMapping("/patients")
+    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
+        String clinicianId = SecurityUtils.getCurrentUserId();
+        Patient created = patientService.createPatient(patient, clinicianId);
+
+        auditService.logEvent(
+                clinicianId,
+                "Dr. Clinician",
+                Role.CLINICIAN,
+                "PATIENT_CREATED",
+                "PATIENT_RECORD",
+                created.getPatientReference(),
+                "Registered new patient profile with reference " + created.getPatientReference(),
+                "SUCCESS",
+                "127.0.0.1"
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @GetMapping("/patients/search")
+    public ResponseEntity<List<Patient>> searchPatients(@RequestParam(required = false) String query) {
+        return ResponseEntity.ok(patientService.searchPatients(query));
+    }
+
     @GetMapping("/patients/{id}")
     public ResponseEntity<?> getPatientById(@PathVariable String id) {
         String clinicianId = SecurityUtils.getCurrentUserId();

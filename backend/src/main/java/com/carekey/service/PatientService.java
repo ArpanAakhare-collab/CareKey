@@ -76,12 +76,97 @@ public class PatientService {
     }
 
     public Optional<Patient> getPatientById(String id) {
-        return patients.stream().filter(p -> p.getId().equalsIgnoreCase(id)).findFirst();
+        return patients.stream()
+                .filter(p -> (p.getId() != null && p.getId().equalsIgnoreCase(id)) ||
+                             (p.getPatientReference() != null && p.getPatientReference().equalsIgnoreCase(id)))
+                .findFirst();
+    }
+
+    public Optional<Patient> getPatientByOwnerUid(String ownerUid) {
+        return patients.stream()
+                .filter(p -> (p.getOwnerUid() != null && p.getOwnerUid().equalsIgnoreCase(ownerUid)) ||
+                             (p.getId() != null && p.getId().equalsIgnoreCase(ownerUid)))
+                .findFirst();
     }
 
     public Optional<Patient> findByQRToken(String token) {
         return patients.stream()
-                .filter(p -> p.getQrToken().equalsIgnoreCase(token) || p.getId().equalsIgnoreCase(token) || p.getPatientReference().equalsIgnoreCase(token))
+                .filter(p -> (p.getQrToken() != null && p.getQrToken().equalsIgnoreCase(token)) ||
+                             (p.getId() != null && p.getId().equalsIgnoreCase(token)) ||
+                             (p.getPatientReference() != null && p.getPatientReference().equalsIgnoreCase(token)))
                 .findFirst();
     }
+
+    public synchronized Patient createPatient(Patient patient, String doctorId) {
+        String refId = "CK-" + (10000 + (int)(Math.random() * 90000));
+        patient.setId(refId);
+        patient.setPatientReference(refId);
+        patient.setCreatedByDoctorId(doctorId);
+        patient.setCreatedAt(Instant.now());
+        patient.setUpdatedAt(Instant.now());
+        patient.setQrStatus("Active");
+        if (patient.getQrToken() == null || patient.getQrToken().isBlank()) {
+            patient.setQrToken("https://carekey.app/access/" + refId + "-SEC" + (1000 + (int)(Math.random() * 9000)));
+        }
+        patients.add(patient);
+        return patient;
+    }
+
+    public List<Patient> searchPatients(String query) {
+        if (query == null || query.isBlank()) {
+            return new ArrayList<>(patients);
+        }
+        String term = query.trim().toLowerCase();
+        List<Patient> result = new ArrayList<>();
+        for (Patient p : patients) {
+            if ((p.getPatientReference() != null && p.getPatientReference().toLowerCase().contains(term)) ||
+                (p.getId() != null && p.getId().toLowerCase().contains(term)) ||
+                (p.getName() != null && p.getName().toLowerCase().contains(term)) ||
+                (p.getPhone() != null && p.getPhone().toLowerCase().contains(term)) ||
+                (p.getEmail() != null && p.getEmail().toLowerCase().contains(term))) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    public synchronized Optional<Patient> updatePatientProfile(String ownerUid, Patient profileData) {
+        Optional<Patient> existingOpt = getPatientByOwnerUid(ownerUid);
+        if (existingOpt.isEmpty()) {
+            // Auto create profile for patient
+            String refId = "CK-" + (10000 + (int)(Math.random() * 90000));
+            profileData.setId(refId);
+            profileData.setPatientReference(refId);
+            profileData.setOwnerUid(ownerUid);
+            profileData.setProfileCompleted(true);
+            profileData.setCreatedAt(Instant.now());
+            profileData.setUpdatedAt(Instant.now());
+            if (profileData.getQrToken() == null) {
+                profileData.setQrToken("https://carekey.app/access/" + refId + "-SEC" + (1000 + (int)(Math.random() * 9000)));
+            }
+            patients.add(profileData);
+            return Optional.of(profileData);
+        }
+
+        Patient existing = existingOpt.get();
+        if (profileData.getName() != null) existing.setName(profileData.getName());
+        if (profileData.getDateOfBirth() != null) existing.setDateOfBirth(profileData.getDateOfBirth());
+        if (profileData.getGender() != null) existing.setGender(profileData.getGender());
+        if (profileData.getBloodGroup() != null) existing.setBloodGroup(profileData.getBloodGroup());
+        if (profileData.getPhone() != null) existing.setPhone(profileData.getPhone());
+        if (profileData.getEmail() != null) existing.setEmail(profileData.getEmail());
+        if (profileData.getAddress() != null) existing.setAddress(profileData.getAddress());
+        if (profileData.getCity() != null) existing.setCity(profileData.getCity());
+        if (profileData.getDistrict() != null) existing.setDistrict(profileData.getDistrict());
+        if (profileData.getState() != null) existing.setState(profileData.getState());
+        if (profileData.getEmergencyContactName() != null) existing.setEmergencyContactName(profileData.getEmergencyContactName());
+        if (profileData.getEmergencyContactPhone() != null) existing.setEmergencyContactPhone(profileData.getEmergencyContactPhone());
+        if (profileData.getAllergies() != null) existing.setAllergies(profileData.getAllergies());
+        if (profileData.getExistingConditions() != null) existing.setExistingConditions(profileData.getExistingConditions());
+        if (profileData.getCurrentMedications() != null) existing.setCurrentMedications(profileData.getCurrentMedications());
+        existing.setProfileCompleted(true);
+        existing.setUpdatedAt(Instant.now());
+        return Optional.of(existing);
+    }
 }
+

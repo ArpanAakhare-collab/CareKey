@@ -173,7 +173,7 @@ export function PatientLogin({ onNavigate }) {
               className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer hover:border-sky-500/40"
             >
               <KeyRound className="w-3.5 h-3.5 text-sky-400" />
-              <span>One-Click Test Patient Sign In</span>
+              <span>One-Click Patient Demo Access (Rahul Sharma &mdash; CK-10482)</span>
             </button>
           </div>
 

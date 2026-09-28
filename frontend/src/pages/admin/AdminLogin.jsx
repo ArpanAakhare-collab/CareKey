@@ -174,7 +174,7 @@ export function AdminLogin({ onNavigate }) {
               className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer hover:border-purple-500/40"
             >
               <KeyRound className="w-3.5 h-3.5 text-purple-400" />
-              <span>One-Click Test Administrator Sign In</span>
+              <span>One-Click Administrator Demo Access (Public Health Officer)</span>
             </button>
           </div>
 

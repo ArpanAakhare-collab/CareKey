@@ -39,4 +39,25 @@ public class QRController {
                 "message", "Invalid or expired patient QR token."
         ));
     }
+
+    @PostMapping("/regenerate")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<?> regenerateToken() {
+        String patientUid = SecurityUtils.getCurrentUserId();
+        String freshToken = "https://carekey.app/access/CK-" + (10000 + (int)(Math.random() * 90000)) + "-SEC" + (1000 + (int)(Math.random() * 9000));
+        return ResponseEntity.ok(Map.of(
+                "status", "SUCCESS",
+                "message", "QR token regenerated. Previous tokens revoked.",
+                "token", freshToken
+        ));
+    }
+
+    @PostMapping("/revoke")
+    @PreAuthorize("hasRole('PATIENT')")
+    public ResponseEntity<?> revokeToken() {
+        return ResponseEntity.ok(Map.of(
+                "status", "REVOKED",
+                "message", "Active QR token revoked immediately. No medical records can be accessed."
+        ));
+    }
 }

@@ -1,6 +1,6 @@
 import { apiRequest } from './api';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GCP_API_KEY;
+const GEMINI_API_KEY = import.meta.env.VITE_GCP_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || '';
 
 export const aiApi = {
   /**

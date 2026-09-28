@@ -12,6 +12,7 @@ import { DoctorDashboard } from './pages/doctor/DoctorDashboard';
 import { PatientLogin } from './pages/patient/PatientLogin';
 import { PatientRegister } from './pages/patient/PatientRegister';
 import { PatientDashboard } from './pages/patient/PatientDashboard';
+import { PatientCompleteProfile } from './pages/patient/PatientCompleteProfile';
 import { FindDoctor } from './pages/patient/FindDoctor';
 import { MyDoctors } from './pages/patient/MyDoctors';
 
@@ -34,7 +35,7 @@ import { Settings } from './pages/Settings';
 import { ShieldCheck, RefreshCw } from 'lucide-react';
 
 function AppContent() {
-  const { isAuthenticated, checkingAuth, role } = useAuth();
+  const { user, isAuthenticated, checkingAuth, role } = useAuth();
   
   // Track active browser path
   const [currentPath, setCurrentPath] = useState(() => {
@@ -114,7 +115,59 @@ function AppContent() {
         />
       );
     }
-    return <DoctorDashboard onNavigate={navigate} />;
+    return <DoctorDashboard onNavigate={navigate} initialTab="dashboard" />;
+  }
+
+  if (currentPath === '/doctor/add-patient') {
+    if (!isAuthenticated) {
+      return <DoctorLogin onNavigate={navigate} />;
+    }
+    if (role !== 'DOCTOR') {
+      return (
+        <Forbidden403 
+          currentRole={role} 
+          requiredRole="DOCTOR" 
+          portalName="Doctor Add Patient Portal" 
+          onNavigate={navigate} 
+        />
+      );
+    }
+    return <DoctorDashboard onNavigate={navigate} initialTab="add-patient" />;
+  }
+
+  if (currentPath === '/doctor/scan-qr') {
+    if (!isAuthenticated) {
+      return <DoctorLogin onNavigate={navigate} />;
+    }
+    if (role !== 'DOCTOR') {
+      return (
+        <Forbidden403 
+          currentRole={role} 
+          requiredRole="DOCTOR" 
+          portalName="Doctor QR Scan Portal" 
+          onNavigate={navigate} 
+        />
+      );
+    }
+    return <DoctorDashboard onNavigate={navigate} initialTab="scan-qr" />;
+  }
+
+  if (currentPath.startsWith('/doctor/patient/')) {
+    if (!isAuthenticated) {
+      return <DoctorLogin onNavigate={navigate} />;
+    }
+    if (role !== 'DOCTOR') {
+      return (
+        <Forbidden403 
+          currentRole={role} 
+          requiredRole="DOCTOR" 
+          portalName="Authorized Patient Medical Record" 
+          onNavigate={navigate} 
+        />
+      );
+    }
+    const targetPatientId = currentPath.replace('/doctor/patient/', '');
+    return <DoctorDashboard onNavigate={navigate} initialTab="patient-detail" targetPatientId={targetPatientId} />;
   }
 
   // 3. Patient Portal Routes
@@ -122,8 +175,28 @@ function AppContent() {
     return <PatientRegister onNavigate={navigate} />;
   }
 
+  if (currentPath === '/patient/complete-profile') {
+    if (!isAuthenticated) {
+      return <PatientLogin onNavigate={navigate} />;
+    }
+    if (role !== 'PATIENT') {
+      return (
+        <Forbidden403 
+          currentRole={role} 
+          requiredRole="PATIENT" 
+          portalName="Patient Health Profile Setup" 
+          onNavigate={navigate} 
+        />
+      );
+    }
+    return <PatientCompleteProfile onNavigate={navigate} />;
+  }
+
   if (currentPath === '/patient/login') {
     if (isAuthenticated && role === 'PATIENT') {
+      if (user?.profileCompleted === false) {
+        return <PatientCompleteProfile onNavigate={navigate} />;
+      }
       return <PatientDashboard onNavigate={navigate} />;
     }
     return <PatientLogin onNavigate={navigate} />;
@@ -143,7 +216,44 @@ function AppContent() {
         />
       );
     }
-    return <PatientDashboard onNavigate={navigate} />;
+    if (user?.profileCompleted === false) {
+      return <PatientCompleteProfile onNavigate={navigate} />;
+    }
+    return <PatientDashboard onNavigate={navigate} initialTab="dashboard" />;
+  }
+
+  if (currentPath === '/patient/profile') {
+    if (!isAuthenticated) {
+      return <PatientLogin onNavigate={navigate} />;
+    }
+    if (role !== 'PATIENT') {
+      return (
+        <Forbidden403 
+          currentRole={role} 
+          requiredRole="PATIENT" 
+          portalName="Patient Profile" 
+          onNavigate={navigate} 
+        />
+      );
+    }
+    return <PatientDashboard onNavigate={navigate} initialTab="profile" />;
+  }
+
+  if (currentPath === '/patient/my-qr') {
+    if (!isAuthenticated) {
+      return <PatientLogin onNavigate={navigate} />;
+    }
+    if (role !== 'PATIENT') {
+      return (
+        <Forbidden403 
+          currentRole={role} 
+          requiredRole="PATIENT" 
+          portalName="Patient Secure QR Portal" 
+          onNavigate={navigate} 
+        />
+      );
+    }
+    return <PatientDashboard onNavigate={navigate} initialTab="my-qr" />;
   }
 
   if (currentPath === '/patient/find-doctor') {
